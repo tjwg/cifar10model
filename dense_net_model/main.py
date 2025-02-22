@@ -11,7 +11,7 @@ def set_background():
         """
         <style>
         .stApp {
-            background: url("https://img.cdn-pictorem.com/uploads/gallerysmall/gallerysmall_2150823.jpg") no-repeat center center fixed;
+            background: url("https://leighbarrywatercolors.com/cdn/shop/products/como1_1588x.jpg?v=1594457757") no-repeat center center fixed;
             background-size: cover;
         }
         .stApp::before {
