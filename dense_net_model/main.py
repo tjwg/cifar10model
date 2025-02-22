@@ -11,7 +11,7 @@ def set_background():
         """
         <style>
         .stApp {
-            background: url("https://culturetourist.com/wp-content/uploads/2023/12/Johansen_Viggo_-_Radosne_Boze_Narodzenie.webp") no-repeat center center fixed;
+            background: url("https://img.cdn-pictorem.com/uploads/gallerysmall/gallerysmall_2150823.jpg") no-repeat center center fixed;
             background-size: cover;
         }
         .stApp::before {
