@@ -7,17 +7,16 @@ import os
 
 # Load Model with Error Handling
 MODEL_PATH = 'best_densenet_model.h5'
+loaded_model = None
 
-if not os.path.exists(MODEL_PATH):
-    st.error("Model file not found! Check the file path.")
-    loaded_model = None
-else:
+if os.path.exists(MODEL_PATH):
     try:
         loaded_model = tf.keras.models.load_model(MODEL_PATH, compile=False)
         st.write("✅ Model Loaded Successfully!")
     except Exception as e:
         st.error(f"❌ Error Loading Model: {str(e)}")
-        loaded_model = None
+else:
+    st.error("❌ Model file not found! Check the file path.")
 
 st.title('CIFAR-10 Categories Classification')
 
@@ -29,14 +28,18 @@ if genre == 'Camera':
 else:
     ImagePath = st.file_uploader("Choose a file", type=['jpeg', 'jpg', 'png'])
 
+# **Ensure the button always appears**
+predict_button = st.button('Predict')
+
+# Check if an image is uploaded and model is loaded
 if ImagePath is not None and loaded_model is not None:
     try:
-        # Open image with PIL
+        # Open and display image
         image_ = Image.open(ImagePath)
         st.image(image_, width=250, caption="Uploaded Image")
 
         # Process Image
-        loaded_single_image = image_.resize((32, 32))  # Resize for CIFAR-10 model input
+        loaded_single_image = image_.resize((32, 32))  # Resize to CIFAR-10 model input
         test_image = np.array(loaded_single_image)  # Convert to NumPy array
 
         # Ensure Image has 3 Channels (RGB)
@@ -50,8 +53,8 @@ if ImagePath is not None and loaded_model is not None:
             # Debugging: Show Image Shape
             st.write(f"📏 Processed Image Shape: {test_image.shape}")  # Expected: (1, 32, 32, 3)
 
-            # Predict when button is clicked
-            if st.button('Predict'):
+            # **Run prediction only when button is clicked**
+            if predict_button:
                 try:
                     logits = loaded_model(test_image)  # Run model prediction
 
