@@ -13,22 +13,20 @@ def set_background():
         .stApp {
             background: url("https://upload.wikimedia.org/wikipedia/commons/f/f3/Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg") no-repeat center center fixed;
             background-size: cover;
-            position: relative;
         }
         .stApp::before {
             content: "";
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4); /* Dark overlay with 40% opacity */
-            z-index: 0;
+            background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+            z-index: -1;
         }
+        /* Ensure all text is visible */
         h1, h2, h3, h4, h5, h6, p, .stMarkdown {
-            color: white !important; /* Ensures text is readable */
-            position: relative;
-            z-index: 1;
+            color: white !important;
         }
         </style>
         """,
@@ -37,6 +35,7 @@ def set_background():
 
 # Set background image
 set_background()
+
 # Load model safely
 MODEL_PATH = 'dense_net_model/best_densenet121_model.h5'
 
