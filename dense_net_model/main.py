@@ -5,56 +5,31 @@ from tensorflow.keras.preprocessing import image
 from PIL import UnidentifiedImageError
 from PIL import Image
 
-
-json_file = open('_flower.json', 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-loaded_model = model_from_json(loaded_model_json)
-
-loaded_model.load_weights("_flower.h5")
-# print("Loaded model from disk")
-
-st.title('Flower Classification Using CNN')
-
-class_name = ['Daisy', 'Dandelion', 'Rose', 'Sunflower', 'Tulip']
-
-genre = st.radio(
-    "How You Want To Upload Your Image",
-    ('Browse Photos', 'Camera'))
-
-if genre == 'Camera':
-    ImagePath = st.camera_input("Take a picture")
-else:
-    ImagePath = st.file_uploader("Choose a file")
-
-# ImagePath = st.file_uploader("Choose a file")
-
-if ImagePath is not None:
-
-    try:
-        image_ = Image.open(ImagePath)
-
-        st.image(image_, width=250)
-
-    except UnidentifiedImageError:
-        st.write('Input Valid File Format !!!  [ jpeg, jpg, png only this format is supported ! ]')
-
+loaded_model = tf.keras.models.load_model('best_densenet121_model.h5')
 
 try:
     if st.button('Predict'):
-        test_image = image.load_img(ImagePath, target_size=(256, 256))
-        test_image = image.img_to_array(test_image)
+        loaded_single_image = tf.keras.utils.load_img(ImagePath,
+                                                      color_mode='rgb',
+                                                      target_size=(32, 32))  # edit to model input size
+
+        test_image = tf.keras.utils.img_to_array(loaded_single_image)
+        test_image /= 255
 
         test_image = np.expand_dims(test_image, axis=0)
 
-        result = loaded_model.predict(test_image, verbose=0)
+        logits = loaded_model(test_image)
+        softmax = tf.nn.softmax(logits)
 
-        type_ = class_name[np.argmax(result)]
-        st.header('Prediction is: ' + type_)
-        st.header('Confidence is: ' + str(round(np.max(result), 4) * 100) + ' %')
+        predict_output = tf.argmax(logits, -1).numpy()
+        classes = ["Airplane", "Automobile", "Bird", "Cat", "Deer",
+               "Dog", "Frog", "Horse", "Ship", "Truck"]
+        st.header(f"Prediction: {classes[predict_output[0]]}")
 
-except TypeError:
-    st.header('Please Upload Your File !!!')
+        predicted_class = classes[predict_output[0]]
 
-except UnidentifiedImageError:
-    st.header('Input Valid File !!!')
+        # Get the probability of the predicted class
+        probability = softmax.numpy()[0][predict_output[0]] * 100
+
+        # probability = predict_output[0][predicted_class_index] * 100
+        st.header(f"Probability of a {predicted_class}: {probability:.4f}%")
