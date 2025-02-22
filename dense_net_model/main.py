@@ -1,54 +1,57 @@
 import streamlit as st
-import tensorflow as tf
 import numpy as np
+import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 from PIL import Image, UnidentifiedImageError
 
-# Load the pre-trained CIFAR-10 model
-loaded_model = tf.keras.models.load_model('best_densenet_model.h5')
+# Load the trained model
+loaded_model = tf.keras.models.load_model("catanddog.h5")
 
-st.title('CIFAR-10 Image Classification')
+st.title('Cat vs. Dog Classification Using CNN')
 
-# CIFAR-10 class labels
-classes = ["Airplane", "Automobile", "Bird", "Cat", "Deer",
-           "Dog", "Frog", "Horse", "Ship", "Truck"]
+# Class labels (adjusted for cat and dog model)
+class_names = ['Cat', 'Dog']
 
 # Select image upload method
 genre = st.radio(
-    "How would you like to upload your image?",
+    "How You Want To Upload Your Image",
     ('Browse Photos', 'Camera'))
 
 if genre == 'Camera':
     ImagePath = st.camera_input("Take a picture")
 else:
-    ImagePath = st.file_uploader("Choose a file", type=['jpg', 'jpeg', 'png'])
+    ImagePath = st.file_uploader("Choose a file")
 
+# If an image is uploaded
 if ImagePath is not None:
     try:
         image_ = Image.open(ImagePath)
-        st.image(image_, caption="Uploaded Image", width=250)
+        st.image(image_, width=250)
 
         if st.button('Predict'):
-            # Load and preprocess the image
-            loaded_single_image = image.load_img(ImagePath, target_size=(32, 32))  # CIFAR-10 model input size
-            test_image = image.img_to_array(loaded_single_image)
-            test_image = test_image / 255.0  # Normalize pixel values
+            # Load image and preprocess
+            test_image = image.load_img(ImagePath, target_size=(224, 224))  # Match model input size
+            test_image = image.img_to_array(test_image)
+            test_image /= 255.0  # Normalize pixel values
             test_image = np.expand_dims(test_image, axis=0)
 
-            # Get model predictions
+            # Make prediction
             logits = loaded_model.predict(test_image, verbose=0)
             softmax = tf.nn.softmax(logits)
             predict_output = np.argmax(logits, axis=-1)[0]
 
-            predicted_class = classes[predict_output]
+            predicted_class = class_names[predict_output]
             probability = softmax.numpy()[0][predict_output] * 100
 
-            # Display predictions
-            st.header(f"Prediction: {predicted_class}")
-            st.subheader(f"Confidence: {probability:.2f}%")
+            # Display results
+            st.header(f'Prediction: {predicted_class}')
+            st.header(f'Confidence: {probability:.2f} %')
 
     except UnidentifiedImageError:
-        st.error("Invalid file format! Please upload a valid JPEG, JPG, or PNG file.")
+        st.write('Input Valid File Format !!!  [jpeg, jpg, png only this format is supported !]')
 
 except TypeError:
-    st.error('Please upload an image first!')
+    st.header('Please Upload Your File !!!')
+
+except UnidentifiedImageError:
+    st.header('Input Valid File !!!')
