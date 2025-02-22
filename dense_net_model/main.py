@@ -11,7 +11,7 @@ def set_background():
         """
         <style>
         .stApp {
-            background: url("https://sdcason.com/content/images/2021/03/Simon_de_Vlieger_-_Calming_the_storm.jpg") no-repeat center center fixed;
+            background: url("https://300magazine.com/wp-content/uploads/2024/08/Worlds-Most-Famous-Christian-Paintings.jpg") no-repeat center center fixed;
             background-size: cover;
         }
         .stApp::before {
