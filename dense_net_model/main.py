@@ -6,7 +6,7 @@ from PIL import Image, UnidentifiedImageError
 import os
 
 # Load model safely
-loaded_model = tf.keras.models.load_model(MODEL_PATH, compile=False)
+loaded_model = tf.keras.models.load_model('best_densenet121_model.h5')
 #loaded_model = tf.keras.models.load_model(MODEL_PATH, compile=False)
 #loaded_model.build((None, 32, 32, 3))  # Adjust this if your model expects a different size
 
