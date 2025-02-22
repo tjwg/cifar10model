@@ -5,7 +5,6 @@ from tensorflow.keras.preprocessing import image
 from PIL import Image, UnidentifiedImageError
 import os
 
-# Function to set the background image with overlay
 def set_background():
     st.markdown(
         """
@@ -14,20 +13,30 @@ def set_background():
             background: url("https://leighbarrywatercolors.com/cdn/shop/products/como1_1588x.jpg?v=1594457757") no-repeat center center fixed;
             background-size: cover;
         }
-        .stApp::before {
+        /* Remove overlay if not needed */
+        /* .stApp::before {
             content: "";
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+            background: rgba(255, 255, 255, 0.2); 
             z-index: -1;
+        } */
+        
+        /* Make all text black */
+        h1, h2, h3, h4, h5, h6, p, .stMarkdown, .stTextInput label, .stFileUploader label {
+            color: black !important;
         }
-        /* Ensure all text is visible */
-        h1, h2, h3, h4, h5, h6, p, .stMarkdown {
-            color: white !important;
+
+        /* Ensure buttons and inputs are visible */
+        .stButton>button {
+            background-color: #fff !important;
+            color: black !important;
+            border: 1px solid black !important;
         }
+
         </style>
         """,
         unsafe_allow_html=True
