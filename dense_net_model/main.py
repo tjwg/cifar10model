@@ -6,7 +6,7 @@ from PIL import Image, UnidentifiedImageError
 import os
 
 # Load Model with Error Handling
-MODEL_PATH = 'best_densenet_model.h5'
+MODEL_PATH = 'best_densenet121_model.h5'
 loaded_model = None
 
 if os.path.exists(MODEL_PATH):
