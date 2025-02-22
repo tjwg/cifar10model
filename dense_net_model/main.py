@@ -7,18 +7,21 @@ import os
 
 # Load model safely
 MODEL_PATH = 'best_densenet_model.h5'
-loaded_model = tf.keras.models.load_model(MODEL_PATH, compile=False)
-loaded_model.build((None, 32, 32, 3))  # Adjust this if your model expects a different size
 
 if not os.path.exists(MODEL_PATH):
-    st.error("Model file not found! Check the file path.")
-else:
-    loaded_model = tf.keras.models.load_model(MODEL_PATH)
+    st.error("Model file not found! Please upload or check the model path.")
+    st.stop()  # Stops execution if the model is missing
 
-st.title('CIFAR-10 Categories Classification')
+loaded_model = tf.keras.models.load_model(MODEL_PATH)
+
+st.title('CIFAR-10 Image Classification')
+
+# CIFAR-10 class labels
+classes = ["Airplane", "Automobile", "Bird", "Cat", "Deer",
+           "Dog", "Frog", "Horse", "Ship", "Truck"]
 
 # Image upload options
-genre = st.radio("How You Want To Upload Your Image", ('Browse Photos', 'Camera'))
+genre = st.radio("How would you like to upload your image?", ('Browse Photos', 'Camera'))
 
 if genre == 'Camera':
     ImagePath = st.camera_input("Take a picture")
@@ -27,30 +30,31 @@ else:
 
 if ImagePath is not None:
     try:
-        # Open image with PIL
+        # Open and display the uploaded image
         image_ = Image.open(ImagePath)
-        st.image(image_, width=250, caption="Uploaded Image")
+        st.image(image_, caption="Uploaded Image", width=250)
 
-        # Process and predict when button is clicked
+        # Predict button
         if st.button('Predict'):
-            loaded_single_image = image_.resize((32, 32))  # Resize for model input
-            test_image = np.array(loaded_single_image) / 255.0  # Normalize
+            # Convert and preprocess the image
+            image_resized = image_.resize((32, 32))  # Resize to match model input
+            test_image = np.array(image_resized) / 255.0  # Normalize pixel values
             test_image = np.expand_dims(test_image, axis=0)  # Add batch dimension
 
-            # Model prediction
-            logits = loaded_model(test_image)
+            # Make prediction
+            logits = loaded_model.predict(test_image, verbose=0)
             softmax = tf.nn.softmax(logits)
-            predict_output = tf.argmax(logits, -1).numpy()[0]
+            predict_output = np.argmax(logits, axis=-1)[0]
 
-            # CIFAR-10 class labels
-            classes = ["Airplane", "Automobile", "Bird", "Cat", "Deer",
-                       "Dog", "Frog", "Horse", "Ship", "Truck"]
             predicted_class = classes[predict_output]
             probability = softmax.numpy()[0][predict_output] * 100
 
-            # Display result
+            # Display predictions
             st.header(f"Prediction: {predicted_class}")
-            st.subheader(f"Probability: {probability:.2f}%")
+            st.subheader(f"Confidence: {probability:.2f}%")
 
     except UnidentifiedImageError:
-        st.error('Invalid image format! Please upload a valid JPEG, JPG, or PNG file.')
+        st.error("Invalid image format! Please upload a valid JPEG, JPG, or PNG file.")
+
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
