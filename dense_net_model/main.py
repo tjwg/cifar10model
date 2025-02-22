@@ -52,4 +52,3 @@ if ImagePath is not None:
 
     except UnidentifiedImageError:
         st.error('Invalid image format! Please upload a valid JPEG, JPG, or PNG file.')
-
