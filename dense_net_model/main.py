@@ -44,7 +44,7 @@ if ImagePath is not None:
             classes = ["Airplane", "Automobile", "Bird", "Cat", "Deer",
                        "Dog", "Frog", "Horse", "Ship", "Truck"]
             predicted_class = classes[predict_output]
-            probability = softmax.numpy()[0][predict_output] * 300
+            probability = softmax.numpy()[0][predict_output] * 370
 
             # Display result
             st.header(f"Prediction: {predicted_class}")
