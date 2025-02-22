@@ -6,7 +6,7 @@ from PIL import Image, UnidentifiedImageError
 import os
 
 # Load model safely
-MODEL_PATH = 'best_densenet121_model.h5'
+MODEL_PATH = 'dense_net_model/best_densenet121_model.h5'
 
 if not os.path.exists(MODEL_PATH):
     st.error("Model file not found! Check the file path.")
@@ -36,7 +36,7 @@ if ImagePath is not None:
             test_image = np.expand_dims(test_image, axis=0)  # Add batch dimension
 
             # Model prediction
-            logits = loaded_model(test_image)
+            logits = loaded_model.predict(test_image)
             softmax = tf.nn.softmax(logits)
             predict_output = tf.argmax(logits, -1).numpy()[0]
 
