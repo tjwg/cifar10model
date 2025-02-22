@@ -11,7 +11,7 @@ def set_background():
         """
         <style>
         .stApp {
-            background: url("https://300magazine.com/wp-content/uploads/2024/08/Worlds-Most-Famous-Christian-Paintings.jpg") no-repeat center center fixed;
+            background: url("https://culturetourist.com/wp-content/uploads/2023/12/Johansen_Viggo_-_Radosne_Boze_Narodzenie.webp") no-repeat center center fixed;
             background-size: cover;
         }
         .stApp::before {
