@@ -19,10 +19,33 @@ def set_background(image_url):
         }}
         </style>
     """
-    st.markdown(background_style, unsafe_allow_html=True)
-
-# Set background image (replace 'your_image_url.jpg' with an actual URL)
-set_background("https://upload.wikimedia.org/wikipedia/commons/f/f3/Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg")  # Replace with your image link
+    st.markdown(
+    """
+    <style>
+    .stApp {
+        background: url("https://upload.wikimedia.org/wikipedia/commons/f/f3/Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg") no-repeat center center fixed;
+        background-size: cover;
+        position: relative;
+    }
+    .stApp::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4); /* Dark overlay with 40% opacity */
+        z-index: 0;
+    }
+    h1, h2, h3, h4, h5, h6, p, .stMarkdown {
+        color: white !important; /* Ensures text is readable */
+        position: relative;
+        z-index: 1;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # Load model safely
 MODEL_PATH = 'dense_net_model/best_densenet121_model.h5'
