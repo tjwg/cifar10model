@@ -11,7 +11,7 @@ def set_background():
         """
         <style>
         .stApp {
-            background: url("https://upload.wikimedia.org/wikipedia/commons/f/f3/Rembrandt_Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg") no-repeat center center fixed;
+            background: url("https://sdcason.com/content/images/2021/03/Simon_de_Vlieger_-_Calming_the_storm.jpg") no-repeat center center fixed;
             background-size: cover;
         }
         .stApp::before {
